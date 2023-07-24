@@ -91,18 +91,14 @@ def VerifyOTP(request):
                 degree = request.POST.get('degree')
                 student = Student.objects.create(user=user, first_name=first_name,last_name=last_name,
                 username=username, email=email)
-                # major=major, university=university, degree=degree)
                 user.is_student = True
                 user.save() 
 
             print("is_teacher:", is_teacher)
             print("is_student:", is_student)
-            # # user.set_password(password1)
            
             print("User:", user)
             # Save the user object to the database
-          # Set is_teacher to True
-            # user.save()
             
             print("OTP: ", userotp)
           
@@ -221,10 +217,7 @@ def student_registration(request):
             username = request.POST.get('username')
             password1 = request.POST.get('password1')
             password2 = request.POST.get('password2')
-            # major = request.POST.get('major')
-            # university = request.POST.get('university')
-            # degree =request.POST.get('degree')
-            
+    
                 
             form = StudentRegistrationForm(request.POST)
         
@@ -390,36 +383,6 @@ def delete_course(request, pk):
         return redirect('teacher_dashboard')
     
     return render(request, 'courses/delete_course.html', {'course':course})
-
-# @login_required
-# def add_content(request, pk):
-#     try:
-#         course = Course.objects.get(id=pk)
-
-#         if request.method == 'POST':
-#             form = ContentForm(request.POST)
-#             if form.is_valid():
-#                 content = form.save(commit=False)
-#                 content.course_id = course.id
-#                 content.save()
-#                 form.save_m2m()
-
-#                 # Retrieve the purchased students
-#                 purchased_students = course.get_purchased_students()
-#                 for student in purchased_students:
-#                     subject = f'New Topic Available: {content.title}'  # Customize the subject
-#                     message = render_to_string('courses/topics/new_topic_notification.html', {'course': course})  # Customize the email template
-#                     send_mail(subject, '', EMAIL_HOST_USER, [student.email], html_message=message)
-                
-#                 return redirect('teacher_dashboard')
-#         else:
-#             form = ContentForm()
-
-#         return render (request, 'courses/contents/add_content.html', {'form': form, 'course':course})
-    
-#     except Exception as e:
-#         print(e)
-#         return render(request, 'courses/contents/content_error.html')
 
 
 @login_required

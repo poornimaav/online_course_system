@@ -30,9 +30,6 @@ class Student(models.Model):
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    # major = models.CharField(max_length=50, blank=True, default=None)
-    # university = models.CharField(max_length=100, blank=True, default=None)
-    # degree = models.CharField(max_length=30, blank=True, default=None)
 
     def __str__(self):
         return self.user.username
@@ -77,18 +74,13 @@ class Course(models.Model):
         purchase = Purchase(course=self, student=user, teacher=self.teacher, transaction_id=transaction_id)
         purchase.save()
 
-    # def mark_as_purchased(self, user):
-        # self.purchased_by.add(user)
-        # purchase = Purchase(course=self, student=user)
-        # purchase.save()
+
 
     def get_purchased_students(self):
 
         User = get_user_model()
         return User.objects.filter(purchased_courses=self, is_student=True)
-        # def __str__(self):
-        #     return self.User.title
-        # return self.purchased_by.filter(is_student=True)
+
 
     def __str__(self):
         return self.title
