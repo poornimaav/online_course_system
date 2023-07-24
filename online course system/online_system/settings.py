@@ -41,10 +41,6 @@ INSTALLED_APPS = [
 
     'courses.apps.CoursesConfig',
     'django.contrib.humanize',
-    'rest_framework',
-    'api.apps.ApiConfig',
-
-
 ]
 
 AUTH_USER_MODEL = 'courses.User'
@@ -91,23 +87,6 @@ DATABASES = {
         'USER' : 'postgres',
         'PASSWORD' : 'Poornima@890',
         'HOST' : 'localhost'
-    }
-}
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-}
-
-DJOSER = {
-    'SERIALIZERS': {
-        'user_create': 'your_app_name.serializers.CustomUserCreateSerializer',
     }
 }
 
