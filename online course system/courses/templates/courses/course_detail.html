@@ -1,0 +1,56 @@
+<!-- course_detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+<h2 class="text-success p-2">{{ course.title }}</h2>
+<div class="bg-light p-3">
+    <p><b>Description: </b>{{ course.description }}</p>
+    <p><b>Price: </b>{{ course.price }}</p>
+    <p><b>Duration: </b>{{course.duration}} hours </p>
+    <!-- <p>{{course.teacher}}</p> -->
+</div> 
+
+
+{% if user.is_authenticated %}
+{% if user.is_teacher %}
+
+<a href="{% url 'add_content' course.pk %}"><button class="btn btn-success my-3">Add Content</button></a>
+{% endif %}
+
+<h3 class="text-primary mb-3">Contents:</h3>
+<ul>
+    {% for content in course.course_contents.all %}
+    <li class="bg-light p-3 mb-3">
+            <p><strong>Content Title: {{ content.title }}</strong></p>
+            <p><b>Topics covered:</b> {{ content.text }}</p> 
+            <p><b>Video URL:</b> <a href="{{ content.video_url }}">{{ content.video_url }} </a></p>
+       
+        {% if user.is_teacher %}
+        <!-- <a href="{% url 'update_content' content.pk %}"><button class="btn btn-warning">Update</button></a>
+        <form action="{% url 'delete_content' content.pk %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger mr-3 mt-3" onclick="return confirm('Are you sure you want to delete this content {{ content.title }} of course {{course.title}} ?' )">Delete</button>
+        </form>  -->
+            <div class="d-flex align-items-center justify-content-left">
+                <a href="{% url 'update_content' content.pk %}"><button class="btn btn-warning">Update</button></a>
+                <form action="{% url 'delete_content' content.pk %}" method="post" class="d-inline mx-3">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger  mt-0" onclick="return confirm('Are you sure you want to delete this content {{ content.title }} of course {{course.title}}?')">Delete</button>
+                </form> 
+            </div>
+        {% endif %}
+    </li>   
+    <hr>
+
+    {% empty %}
+        <li>No contents available.</li>
+    {% endfor %}
+{% endif %}
+    </li>
+</ul>
+{% endblock %}
+
+

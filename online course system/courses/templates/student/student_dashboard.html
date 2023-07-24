@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2 class="bg-info text-white mb-3 p-3">Student Dashboard</h2>
+  <h5 class="text-dark">Welcome, {{ user.username }}!</h5>
+  
+  <h2 class="text-primary mb-3 py-3">Purchased Courses:</h2>
+  {% if purchased_courses %}
+    <ul>
+      {% for course in purchased_courses %}
+      
+        <li class="bg-light p-3">
+          <p><b>Title: </b>{{ course.title }}</p>
+          <p><b>Description: </b>{{ course.description }}</p>
+          <p><b>Price: </b>{{ course.price }}</p>
+          <p><b>Instructor: </b>{{ course.teacher }}</p>
+          <br>
+          <a href="{% url 'course_detail' course.pk %}"><button class="btn btn-success">View Details</button></a>
+          </li>
+          <hr>
+          <!-- Display other course attributes as needed -->
+        <br>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No purchased courses found.</p>
+  {% endif %}
+{% endblock %}
+  
+

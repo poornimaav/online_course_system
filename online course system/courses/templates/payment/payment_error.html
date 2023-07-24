@@ -1,0 +1,10 @@
+<!-- payment_error.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <p>An error occurred while processing the payment. Please check your internet connection.</p>
+  <p>Go back to courses and try again</p>
+  <a href="{% url 'course_list' %}">Back</a>
+ 
+{% endblock %}

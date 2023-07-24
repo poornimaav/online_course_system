@@ -1,0 +1,12 @@
+<!-- create_course.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2 class="bg-info text-white p-3 mb-3">Create Course</h2>
+ <br>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Create</button>
+  </form>
+{% endblock %}

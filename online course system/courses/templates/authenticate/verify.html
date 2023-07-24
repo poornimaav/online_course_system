@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+
+{% if msg %}
+  {{ msg | safe }}
+{% else %}
+  <h4>An OTP has been sent to the registered email ID. Enter the OTP below to get verified</h4>
+{% endif %}
+
+<input type="text" name="otp" id="otp" class="m-3">
+
+<button class="btn btn-pill text-white btn-block btn-primary mt-3" id="otp-submit">Submit</button>
+<!-- <button class="btn btn-pill text-white btn-block btn-primary" >Submit</button> -->
+<p id='otp-success-msg' style="display: none">OTP matched successfully please login</p>
+<p id="otp-error-msg" style="color: red; display: none;">Invalid OTP. Please try again.</p>
+
+<script>
+  $(document).ready(function() {
+    $('#otp-submit').click(function() {
+      let otp = $('#otp').val();
+      console.log("OTP: ", otp);
+
+      if (otp === '{{ otp }}') {
+        console.log("OTP Matched");
+       /*  $('#otp-success-msg').show(); */
+
+        $.ajax({
+          type: "POST",
+          url: '{% url "verify" %}',
+          data: {
+            'otp': '{{ otp }}',
+            'first_name': '{{ first_name }}',
+            'last_name': '{{ last_name }}',
+            'username': '{{ username }}',
+            'email': "{{ email }}",
+            'password1': "{{ password1 }}",
+            'password2': "{{ password2 }}",
+            'is_teacher': "{{is_teacher}}",
+            'is_student': "{{is_student}}",
+            'bio': "{{bio}}",
+            'expertise':"{{expertise}}",
+
+          },
+          success: function(data) {
+            /* $('#otp-success-msg').show();*/
+            alert("OTP matched successfully please login");
+             window.location.href = "{% url 'login_view' %}"; 
+          }
+        });
+      } else {
+        $('#otp-error-msg').show();
+      }
+    });
+  });
+</script>
+{% endblock %}

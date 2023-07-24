@@ -1,0 +1,101 @@
+{% load static %}
+
+<style>
+  nav {
+      /* background-color: #a2ddda; */
+      background-color: #007bff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: right; /* Align the navigation links to the right */
+      padding: 10px;
+  }
+    
+  nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+  }
+    
+  nav ul li {
+      display: inline-block;
+      position: relative;
+  }
+    
+  nav ul li a {
+      display: block;
+      padding: 10px 10px;
+      text-decoration: none;
+      color: #333;
+      display: flex;
+      justify-content: flex-end;
+  }
+    
+  nav ul li a:hover {
+      background-color: #ddd;
+  }
+    
+  .logo {
+      height: 40px; /* Set the desired height of your logo image */
+      width: 40px;
+      margin-left: 20px; /* Maintain aspect ratio */
+  }
+
+  .search-bar {
+      margin-left: 50px;
+      border: none;
+      /* Add desired left margin */
+  }
+
+  .navigation {
+      margin-left: auto; /* Push the navigation to the right */
+  }
+
+  .nav-list {
+      display: flex;
+  }
+
+  .nav-list li {
+      margin-left: 10px; /* Add margin between list items */
+  }
+</style>
+
+<!-- <nav class="bg-info"> -->
+  <div class="logo">
+          <!-- <img src="{% static 'images/logo.jpg' %}" alt="Logo"> -->
+          <h2 class="text-white">OCS</h2>
+  </div>
+  <div class="search-bar">
+      <form method="GET" action="{% url 'course_list' %}">
+          <input type="text" name="search" placeholder=" Search by Title" class="p-1 m-1">
+          <button type="submit"  class="btn btn-light p-1 mb-1">Search</button>
+      </form>
+  </div>
+  <div class="navigation">
+      <ul class="nav-list">
+
+        {% if user.is_authenticated %}
+                {% if user.is_student %}
+                    <li><a href="{% url 'student_dashboard' %}" class="text-white">Home</a></li>
+                    <li><a href="{% url 'course_list' %}" class="text-white">Courses</a></li>
+                    <li><a href="{% url 'switch_to_teacher' %}" class="text-white">Switch</a></li>
+                 
+                {% else %}
+                    <li><a href="{% url 'teacher_dashboard' %}" class="text-white">Home</a></li>
+                    <li><a href="{% url 'switch_to_student' %}" class="text-white">Switch</a></li>
+
+                {% endif %}
+                    <li><a href="{% url 'logout' %}" class="text-white">Logout</a></li>
+
+        {% else %}
+            <li><a href="{% url 'index' %}" class="text-white">Signup</a></li>
+                  
+        {% endif %}
+        <!-- <li ><a href="{% url 'about' %}" class="text-white">About</a></li>
+        <li><a href="{% url 'contact' %}" class="text-white">Contact</a></li> -->
+        
+          
+      </ul>
+  </div>
+<!-- </nav> -->
+

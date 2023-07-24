@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content%}
+
+<h3 class="">Course Purchased Student </h3>
+ <p><b>Course Title: </b> <a href="{% url 'course_detail' course.id %}"> {{course.title}}</a></p>
+    <!-- <p><b>Course Title: {{course.title}}</b></p> -->
+    <h6>Students:</h6>
+    {% for student in purchased_students%}
+    <ul>
+    <li>{{ student }}</li>
+    </ul>
+    {% empty %}
+    <p>No students purchased</p>
+    <br>
+{% endfor %}
+
+{% endblock %}

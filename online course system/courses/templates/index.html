@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+    <!-- Style -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <title>Online Course System</title>
+
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f1f1f1;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+    
+    .page-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+    
+      .content-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+      
+      .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+     
+      }
+    
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+    
+      label {
+        display: block;
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+    
+      .form-group {
+        margin-bottom: 20px;
+      }
+      button a {
+        text-decoration: none;
+      }
+    
+    
+    </style>
+<body>
+  <div class="page-container">
+    <div class="content-container">
+      <div class="container">
+        <label>Log in if you have already registered!</label>
+        <div class="form-group last mb-4"> 
+            <a href="{% url 'login_view' %}"><button class="btn btn-success text-white">Login</button></a>
+            
+
+        </div>
+        <br>
+        <label>If not registered, sign up here as!</label>
+        <div class="form-group last mb-4">
+          
+          <a href="{% url 'teacher_registration' %}"><button class="btn btn-success text-white ">Teacher</button></a>
+          <a href="{% url 'student_registration' %}"><button class="btn btn-success text-white ">Student</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}
+ 

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block content %}
+<div class="course_list_container">
+  <h2 class="bg-info text-light p-3">Course List</h2>
+
+    <ul>
+        {% for course in courses %}
+        <li class="bg-light p-3">
+    
+          <p><b>Course: </b>{{ course.title }}</p>
+          <p><b>Description: </b>{{ course.description }}</p>
+          <p><b>Price: </b>{{ course.price }}</p>
+          <p><b>Duration: </b>{{course.duration}} hours </p>
+          <p><b>Instructor: </b>{{ course.teacher.username }}</p>
+        
+
+            {% if user.is_teacher or user in course.purchased_by.all %}
+              <a href="{% url 'course_detail' course.pk %}"><button class="btn btn-primary"> View Details</button></a>
+            {% else %}
+              <form action="{% url 'purchase_course' course.pk %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Purchase Course</button>
+              </form>
+            {% endif %}
+            <!-- {% if user.is_teacher and user == course.teacher %} -->
+              <!-- <a href="{% url 'update_course' course.pk %}"><button class="btn btn-warning">Update</button></a> -->
+              <!-- <a href="{% url 'delete_course' course.pk %}"><button class="btn btn-danger">Delete</button></a> -->
+              <!-- <a href="{% url 'purchased_students' course.pk %}"><button class="btn btn-info">Purchased students</button></a> -->
+              <!-- <br> -->
+          <!-- {% endif %} -->
+          </li>
+          <hr>
+        {% empty %}
+        <p>No courses available</p>
+        {% endfor %}
+          </ul>
+      {% if payment_failed %}
+      <p>Payment failed. <a href="{% url 'topic_list' %}">Go to topic list</a></p>
+      {% endif %}
+
+{% endblock content %}
