@@ -27,7 +27,7 @@ from django.utils.crypto import get_random_string
 import random
 import string
 
-
+#base page
 def base(request):
     courses = Course.objects.all()
     context = {
@@ -35,12 +35,15 @@ def base(request):
     }
     return render(request, 'base.html', context)
 
+# navbar
 def navbar_view(request):
     return render(request, 'navbar.html')
-    
+
+# home
 def home(request):
     return render(request, 'home.html')
 
+#verify otp and save user
 @csrf_exempt
 def VerifyOTP(request):
     User = get_user_model()
@@ -111,47 +114,50 @@ def VerifyOTP(request):
         return JsonResponse({'errors': 'Passwords do not match'}, status=400)
     return render(request, 'authenticate/verify.html')
 
+
 def index(request):
     return render(request, 'index.html')
 
-def register(request):
-    # form = SignUpForm()
-    msg = None
-    if request.method == "POST":
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        username = request.POST.get('username')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        is_teacher = request.POST.get('is_teacher')
-        is_student = request.POST.get('is_student')
-        form = SignUpForm(request.POST)
+# #register
+# def register(request):
+#     # form = SignUpForm()
+#     msg = None
+#     if request.method == "POST":
+#         first_name = request.POST.get('first_name')
+#         last_name = request.POST.get('last_name')
+#         email = request.POST.get('email')
+#         username = request.POST.get('username')
+#         password1 = request.POST.get('password1')
+#         password2 = request.POST.get('password2')
+#         is_teacher = request.POST.get('is_teacher')
+#         is_student = request.POST.get('is_student')
+#         form = SignUpForm(request.POST)
 
-        if is_teacher:
+#         if is_teacher:
 
-            form = TeacherRegistrationForm(request.POST)
-        else:
-            form = SignUpForm(request.POST)
+#             form = TeacherRegistrationForm(request.POST)
+#         else:
+#             form = SignUpForm(request.POST)
 
-        if form.is_valid():
+#         if form.is_valid():
 
-            otp = random.randint(1000, 9999)
-            send_mail(
-                "OTP: ",
-                 f"Verify Your Mail by the OTP: \n{otp}",  
-                EMAIL_HOST_USER,
-                [email]
-                )
-            return render(request, 'authenticate/verify.html' , {'otp': otp,  'first_name':  first_name, 'last_name':last_name ,'email': email, 'username': username, 'password1': password1, 'password2': password2, 'is_student': is_student, 'is_teacher': is_teacher})
+#             otp = random.randint(1000, 9999)
+#             send_mail(
+#                 "OTP: ",
+#                  f"Verify Your Mail by the OTP: \n{otp}",  
+#                 EMAIL_HOST_USER,
+#                 [email]
+#                 )
+#             return render(request, 'authenticate/verify.html' , {'otp': otp,  'first_name':  first_name, 'last_name':last_name ,'email': email, 'username': username, 'password1': password1, 'password2': password2, 'is_student': is_student, 'is_teacher': is_teacher})
              
-        else:
-            msg = 'form is not valid'
+#         else:
+#             msg = 'form is not valid'
 
-    else:
-        form = SignUpForm()
-    return render(request, 'authenticate/register.html', {'form': form, 'msg': msg})
+#     else:
+#         form = SignUpForm()
+#     return render(request, 'authenticate/register.html', {'form': form, 'msg': msg})
 
+#register teacher
 def teacher_registration(request):
     try:
         msg = None
@@ -207,6 +213,7 @@ def teacher_registration(request):
         return render(request, 'register_error.html')
 
 
+#register student
 def student_registration(request):
     try:
         msg = None
@@ -250,7 +257,7 @@ def student_registration(request):
 def register_error(request):
     return render(request, 'authenticate/register_error.html')
         
-
+#login
 def login_view(request):
     form = LoginForm(request.POST or None)
     msg = None
@@ -273,11 +280,12 @@ def login_view(request):
     return render(request, 'authenticate/login.html', {'form': form, 'msg': msg})
 
 
-
+#logout
 def logout_view(request):
     logout(request)
     return redirect('base')
 
+#switch user role to student
 def switch_to_student(request):
     user = request.user
 
@@ -295,6 +303,7 @@ def switch_to_student(request):
     # If the user is not logged in as a teacher, redirect to an error page or display a message
     return HttpResponse('Unable to switch to student mode')
 
+# switch user role to teacher
 def switch_to_teacher(request):
     user = request.user
     if user.is_authenticated and user.is_student:
@@ -308,6 +317,8 @@ def switch_to_teacher(request):
     return HttpResponse('Unable to switch to teacher mode')
     # return render(request, 'teacher/switch_to_student.html')
 
+
+#courses list
 def course_list(request):
     courses = Course.objects.all()
     search_query = request.GET.get('search', '')  # Get the search query from the request
@@ -324,7 +335,7 @@ def course_list(request):
     
     return render(request, 'courses/course_list.html', context)
 
-
+# course create
 @login_required
 def create_course(request):
     try:
@@ -361,6 +372,7 @@ def create_course(request):
 def course_error(request):
     return render(request, 'courses/course_error.html')
 
+#update course
 @login_required
 def update_course(request, pk):
     course = Course.objects.get(id=pk)
@@ -374,7 +386,7 @@ def update_course(request, pk):
         
     return render(request, 'courses/update_course.html', {'form':form})
 
-
+#delete course
 @login_required
 def delete_course(request, pk):
     course = Course.objects.get(id=pk)
@@ -384,7 +396,7 @@ def delete_course(request, pk):
     
     return render(request, 'courses/delete_course.html', {'course':course})
 
-
+# add content to course
 @login_required
 def add_content(request, pk):
     try:
@@ -417,6 +429,7 @@ def add_content(request, pk):
 def content_error(request):
     return render(request, 'courses/contents/content_error.html')
 
+#content detail
 def course_detail(request, pk):
     course = get_object_or_404(Course, id=pk)
     contents = course.contents
@@ -424,6 +437,7 @@ def course_detail(request, pk):
     
     return render(request, 'courses/course_detail.html', {'course': course, 'contents': contents, 'purchased_students': purchased_students})
 
+#update content
 @login_required
 def update_content(request, pk):
     content= Content.objects.get(id=pk)
@@ -437,7 +451,7 @@ def update_content(request, pk):
         
     return render(request, 'courses/contents/update_content.html', {'form':form})
 
-
+#delete content
 @login_required
 def delete_content(request, pk):
     content = Content.objects.get(id=pk)
@@ -447,10 +461,12 @@ def delete_content(request, pk):
     
     return render(request, 'courses/contents/delete_content.html', {'content':content})
 
+#generate invoice number
 def generate_invoice_number(course_pk, user_pk):
     random_string = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
     return f'{course_pk}-{user_pk}-{random_string}'
 
+#purchase course
 def purchase_course(request, pk):
     try:
         course = get_object_or_404(Course, pk=pk)
@@ -504,6 +520,7 @@ def purchase_course(request, pk):
         # Handle other exceptions
         return render(request, 'payment/payment_error.html')
 
+#payment success
 def payment_success(request):
     payment_id = request.GET.get('paymentId')
     payer_id = request.GET.get('PayerID')
@@ -522,6 +539,7 @@ def payment_success(request):
     else:
         return render(request, 'payment/payment_failed.html')
 
+#payment cancel
 def payment_cancel(request):
     # Handle payment cancellation or failure
     # return HttpResponse('Payment canceled')
@@ -529,6 +547,7 @@ def payment_cancel(request):
     # return render(request, 'course_list.html', {'payment_failed': payment_failed})
     return render(request, 'payment/payment_failed.html')
 
+#student dashboard
 @login_required
 def student_dashboard(request):
     purchased_courses = Course.objects.filter(purchased_by=request.user)
@@ -538,6 +557,7 @@ def student_dashboard(request):
     
     return render(request, 'student/student_dashboard.html', context)
 
+#teacher dashboard
 @login_required
 def teacher_dashboard(request):
     user = request.user
@@ -548,7 +568,7 @@ def teacher_dashboard(request):
         return HttpResponse('You are not authorized to access this page.')
 
 
-
+#course purchased students
 def course_purchased_students(request, pk):
     course = get_object_or_404(Course, id=pk)
     purchased_students = course.get_purchased_students()
@@ -558,9 +578,10 @@ def course_purchased_students(request, pk):
     }
     return render(request, 'teacher/course_purchased_students.html', context)
 
-
+#contact
 def contact(request):
     return render(request, 'contact.html')
 
+#about
 def about(request):
     return render(request, 'about.html')
